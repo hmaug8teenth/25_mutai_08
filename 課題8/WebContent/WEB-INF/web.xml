@@ -6,7 +6,7 @@ id="WebApp_ID" version="3.1">
 
   <servlet>
 	<servlet-name>input</servlet-name>
-	<servlet-class>practice.RegistServlet</servlet-class>
+	<servlet-class>lesson2.RegistServlet</servlet-class>
   </servlet>
 
   <servlet-mapping>
