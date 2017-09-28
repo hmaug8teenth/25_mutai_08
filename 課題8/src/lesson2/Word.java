@@ -5,11 +5,11 @@ public class Word {
 		private String japanese;
 
 		public Word(String english, String japanese) {
-			super();
 			this.english = english;
 			this.japanese = japanese;
 }
 
+		@Override
 		public String toString() {
 				return "英単語:" + english + "日本語:" + japanese;
 }

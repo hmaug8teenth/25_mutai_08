@@ -13,23 +13,25 @@ public class WordDAO {
 	PreparedStatement st = null;
 	ResultSet rs = null;
 
-	static String URL = "jdbc:mysql://localhost/testdb?useUnicode=true&characterEncoding=utf8";
-	static String USER = "axizuser";
-	static String PW = "axiz";
+	public WordDAO() {
+	}
 
-	public int registWords(List<Word> words) {
+	public int registWords(ArrayList<Word> words) {
 		int result = 0;
 		try {
 			String SQL = "INSERT INTO dictionary VALUES (?, ?)";
 			Class.forName("com.mysgl.idbc.Driver");
-			con = DriverManager.getConnection(URL, USER, PW);
+			con = DriverManager.getConnection ("jdbc:mysql://localhost/testdb?useUnicode=true&characterEncoding=utf8", "root", "");
 
-			for (Word tmp : words) {
+			for(int i=0;i<words.size();i++){
+				Word wd = words.get(i);
+
 				st = con.prepareStatement(SQL);
-				st.setString(1, tmp.getEnglish());
-				st.setString(2, tmp.getJapanese());
-				st. executeUpdate();
-				result++;
+				st.setString(1,wd.getEnglish());
+				st.setString(2,wd.getJapanese());
+
+
+				result = result + st.executeUpdate();
 			}
 
 		} catch (ClassNotFoundException e) {
@@ -44,29 +46,31 @@ public class WordDAO {
 					e.printStackTrace();
 				}
 			}
-			if ( con != null) {
+		}
+		if ( con != null) {
 				try {
 					con.close();
 				} catch (SQLException e) {
 					e.printStackTrace();
 				}
 			}
-		}
+
 		return result;
 	}
 
 public List<Word> getWords() {
 	List<Word> words = new ArrayList<>();
+
 	try {
-		String SQL = "SELECT english, japanese FROM dictionary";
+		String SQL = "SELECT * FROM dictionary";
 		Class.forName("com.mysql.jdbc.Driver");
-		con = DriverManager.getConnection(URL, USER, PW);
+		con = DriverManager.getConnection("jdbc:mysql://localhost/testdb?useUnicode=true&characterEncoding=utf8", "root", "");
 
 		st =con.prepareStatement(SQL);
 		rs = st.executeQuery();
 
 		while (rs.next()) {
-			Word wd = new Word(rs.getString("engilish"), rs.getString("japanese"));
+			Word wd = new Word(rs.getString("english"), rs.getString("japanese"));
 			words.add(wd);
 		}
 	} catch (ClassNotFoundException e) {
@@ -81,14 +85,15 @@ public List<Word> getWords() {
 				e.printStackTrace();
 			}
 		}
-		if ( con != null) {
+	}
+	if ( con != null) {
 			try {
 				con.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
 		}
-	}
+
 	return words;
-}
+	}
 }
